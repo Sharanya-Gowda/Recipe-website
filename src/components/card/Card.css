@@ -1,0 +1,36 @@
+.cardWrapper{
+    border: 1px solid red;
+    width:50%;
+    padding: 16px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(50, 45, 24);
+    gap: 10px;
+    color: blanchedalmond;
+}
+.cardWrapper img{
+    width: 100%;
+    border-radius: 10px;
+}
+.cardWrapper button{
+    border:none;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: blanchedalmond;
+    color: black;
+    cursor: pointer;
+}
+.cardWrapper button:hover{
+    background-color: crimson;
+    color: blanchedalmond;
+}
+.card{
+    display: flex;
+    border: 1px solid red;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}

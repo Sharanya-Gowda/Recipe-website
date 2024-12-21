@@ -1,0 +1,76 @@
+.loginWrapper {
+    height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width */
+    background-image: url("https://picsum.photos/1600/900");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formWrapper {
+    border: 2px solid rgb(55, 4, 49);
+    width: 300px; /* Increased width */
+    height: 300px; /* Adjusted height */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(226, 160, 160, 0.8); /* Correct RGBA */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Added shadow for elevation */
+    padding: 20px;
+}
+
+.formWrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    
+}
+
+.inputWrapper label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.inputWrapper input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+.inputWrapper input:focus {
+    border-color: rgb(115, 0, 128);
+    box-shadow: 0 0 5px rgba(172, 118, 159, 0.99);
+}
+
+.formWrapper form button {
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    width: 5rem;
+    background-color: rgb(190, 77, 161);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Center the button */
+}
+
+.formWrapper form button:hover {
+    background-color: rgb(188, 16, 182);
+    color: white;
+}
