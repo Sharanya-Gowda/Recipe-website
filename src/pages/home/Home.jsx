@@ -6,31 +6,46 @@ import Card from '../../components/card/Card';
 import home from '../../assets/home.jpg';
 
 const Home = () => {
-    const [query, setQuery] = useState('');  // Default query
-    const [selectedMeal, setSelectedMeal] = useState('');  // Default meal type
-    const [recipes, setRecipes] = useState(null);  // Store recipes
-    const [error, setError] = useState('');  // Track errors
+    const [query, setQuery] = useState('');
+    const [selectedMeal, setSelectedMeal] = useState('breakfast');  // Default value
+    const [recipes, setRecipes] = useState(null);
+    const [error, setError] = useState('');
 
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack', 'teatime'];
-
     const appId = process.env.REACT_APP_API_ID;
     const appKey = process.env.REACT_APP_API_KEY;
 
-    
-
-    //const proxy = 'https://cors-anywhere.herokuapp.com/';
-    const url = `https://api.edamam.com/search?q=${query}&app_id=${appId}&app_key=${appKey}&mealType=${selectedMeal}`;
-
     const getData = async () => {
-        setError('');  // Clear previous errors
-        setRecipes(null);  // Reset recipes
-
+        setError('');
+        setRecipes(null);
+    
+        console.log('Selected Meal Type:', selectedMeal);
+    
         try {
-            const { data } = await axios.get(url);  // Use proxy to handle CORS issues
-            console.log('API Response:', data);
-
-            if (data?.hits && data?.hits?.length > 0) {
-                setRecipes(data?.hits);  // Update with valid results
+            if (!mealTypes.includes(selectedMeal)) {
+                throw new Error('Invalid meal type selected.');
+            }
+    
+            const url = `https://api.edamam.com/search?q=${query}&app_id=${appId}&app_key=${appKey}&mealType=${selectedMeal}`;
+            console.log('API URL:', url);
+    
+            const { data } = await axios.get(url);
+    
+            console.log('API Response:', data); // Log the API response to check if there are multiple recipes
+    
+            if (data?.hits?.length > 0) {
+                setRecipes(data.hits);
+    
+                // Map the recipes and send them to your backend for storage in MongoDB
+                await axios.post('http://localhost:5000/api/recipes/save', {
+                    recipes: data.hits.map(hit => ({
+                        label: hit.recipe.label,
+                        image: hit.recipe.image,
+                        url: hit.recipe.url,
+                        ingredients: hit.recipe.ingredients,
+                        mealType: selectedMeal,
+                    })),
+                });
             } else {
                 setError('Sorry! Try another food.');
             }
@@ -39,39 +54,25 @@ const Home = () => {
             setError('Failed to fetch data. Please try again.');
         }
     };
-
+    
     return (
         <div>
-            {/* Header Component */}
             <Header 
                 query={query}
                 setQuery={setQuery}
                 selectedMeal={selectedMeal}
                 setSelectedMeal={setSelectedMeal}
-                mealTypes={mealTypes} 
+                mealTypes={mealTypes}
                 getData={getData}
             />
 
-            {/* Home image if no search or error */}
-            {!recipes && !error && (
-                <img src={home} className="homeimage" alt="home" />
-            )}
-
-            {/* Display error message if API request fails */}
+            {!recipes && !error && <img src={home} className="homeimage" alt="home" />}
             {error && <h1 className="errorMessage">{error}</h1>}
-
-            {/* Display 'Sorry!' message if no recipes found */}
-            {recipes && recipes?.length === 0 && (
-                <h1 className="noResultsMessage">Sorry! Try another food.</h1>
-            )}
-
-            {/* Display recipes if available */}
             {recipes && recipes.length > 0 && (
-    <div className="recipesWrapper">
-        <Card recipes={recipes} />  {/* Pass the entire recipes array as a prop */}
-    </div>
-)}
-
+                <div className="recipesWrapper">
+                    <Card recipes={recipes} />
+                </div>
+            )}
         </div>
     );
 };
